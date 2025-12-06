@@ -35,8 +35,13 @@ const Auth: React.FC<AuthProps> = ({ onAuthenticated, initialMode = 'LOGIN' }) =
       if (isLogin) {
         if (!formData.email || !formData.password) throw new Error("Please fill in all fields");
         
-        const { error } = await signIn(formData.email, formData.password);
-        if (error) throw new Error(error);
+        const result = await signIn(formData.email, formData.password);
+        if (result.error) {
+          throw new Error(result.error);
+        }
+        if (!result.user) {
+          throw new Error("Login failed. Please check your credentials and try again.");
+        }
         
         onAuthenticated();
       } else {

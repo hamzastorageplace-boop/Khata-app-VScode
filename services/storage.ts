@@ -97,14 +97,30 @@ export const signUp = async (email: string, password: string, name: string): Pro
 export const signIn = async (email: string, password: string): Promise<{ user: User | null; error: string | null }> => {
   if (supabase) {
     try {
+      // Validate inputs
+      if (!email || !password) {
+        return { user: null, error: 'Email and password are required' };
+      }
+
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) return { user: null, error: error.message };
+      
+      // Check for authentication errors
+      if (error) {
+        return { user: null, error: error.message || 'Invalid email or password' };
+      }
+      
+      // Verify that we got a valid user and session
+      if (!data.user) {
+        return { user: null, error: 'Authentication failed. User not found.' };
+      }
+      
       return { 
         user: { id: data.user?.id || '', email: data.user?.email || '', name: data.user?.user_metadata?.name }, 
         error: null 
       };
     } catch (e: any) {
-      return { user: null, error: e.message };
+      console.error("Sign in error:", e);
+      return { user: null, error: e.message || 'An error occurred during sign in' };
     }
   } else {
     // Local Fallback Simulation
