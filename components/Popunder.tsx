@@ -17,7 +17,7 @@ const Popunder: React.FC = () => {
 
         // Check for cooldown to avoid excessive popunders
         const KEY = 'easy_khata_popunder_last_loaded';
-        const COOLDOWN_MS = 30 * 1000; // 30 seconds cooldown
+        const COOLDOWN_MS = 60 * 1000; // 60 seconds cooldown
 
         const lastLoadedStr = localStorage.getItem(KEY);
         const now = Date.now();
@@ -40,11 +40,13 @@ const Popunder: React.FC = () => {
           }
         });
 
-        // Create and inject popunder script
+        // Create popunder script
         script = document.createElement('script');
         script.type = 'text/javascript';
         script.src = '//pl28202503.effectivegatecpm.com/d4/25/74/d4257492450b96c2394fa4924c11863a.js';
         script.async = true;
+        script.defer = false;
+        script.charset = 'utf-8';
 
         script.onload = () => {
           console.log("Popunder script loaded successfully");
@@ -72,7 +74,7 @@ const Popunder: React.FC = () => {
               console.warn("Failed to remove timed-out popunder script", e);
             }
           }
-        }, 20000); // 20 second timeout
+        }, 25000); // 25 second timeout
 
         // Inject into head for better compatibility
         const head = document.head || document.documentElement;
@@ -88,7 +90,7 @@ const Popunder: React.FC = () => {
     // Delay popunder loading to avoid interference with initial page load
     const delayTimeout = setTimeout(() => {
       initPopunder();
-    }, 3000); // Load after 3 seconds
+    }, 4000); // Load after 4 seconds
 
     return () => {
       // Cleanup

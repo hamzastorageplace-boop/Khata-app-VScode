@@ -48,6 +48,16 @@ export interface ContactWithBalance extends Contact {
 
 export type ViewState = 'AUTH' | 'DASHBOARD' | 'ADD_CONTACT' | 'HISTORY' | 'CONTACT_DETAILS' | 'ADD_TRANSACTION';
 
+// Extend window object for ad networks
+declare global {
+  interface Window {
+    atOptions?: any;
+    atScript?: any;
+    pl28202503?: any;
+    pl28202452?: any;
+  }
+}
+
 export interface UserSession {
   isAuthenticated: boolean;
   user: User | null;
