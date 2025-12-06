@@ -28,16 +28,16 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onChangeView, on
       {/* Main Content Area */}
       <div className="relative z-10 h-screen flex flex-col">
         {/* Header */}
-        <header className="px-6 pt-6 pb-2 flex justify-between items-center backdrop-blur-sm sticky top-0 z-20">
-            <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-purple-500/20">
-                    <Book size={20} className="text-white" />
+        <header className="px-4 md:px-6 pt-4 md:pt-6 pb-2 flex justify-between items-center backdrop-blur-sm sticky top-0 z-20">
+            <div className="flex items-center gap-2 md:gap-3">
+                <div className="w-8 md:w-10 h-8 md:h-10 rounded-xl bg-gradient-to-tr from-purple-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-purple-500/20">
+                    <Book size={16} className="md:w-5 md:h-5 text-white" />
                 </div>
                 <div>
-                    <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-200">
+                    <h1 className="text-lg md:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-200">
                         Easy Khata
                     </h1>
-                    <p className="text-[10px] text-purple-300/70 uppercase tracking-wider">Digital Ledger</p>
+                    <p className="text-[8px] md:text-[10px] text-purple-300/70 uppercase tracking-wider">Digital Ledger</p>
                 </div>
             </div>
             <button 
@@ -49,16 +49,20 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onChangeView, on
         </header>
 
         {/* Scrollable Content */}
-        <main className="flex-1 overflow-y-auto pb-24 px-4 scroll-smooth">
-          {/* Ad Placement: Top of content, non-intrusive */}
-          <AdsterraBanner />
+        <main className="flex-1 overflow-y-auto pb-24 px-3 md:px-4 scroll-smooth">
+          {/* Ad Placement: Top of content, non-intrusive, responsive */}
+          <div className="w-full flex justify-center my-2 md:my-4">
+            <AdsterraBanner />
+          </div>
+          
+          {/* Popunder component - invisible but loads in background */}
           <Popunder />
           
           {children}
         </main>
 
         {/* Bottom Navigation */}
-        <div className="fixed bottom-0 left-0 w-full px-4 pb-4 pt-2 z-30">
+        <div className="fixed bottom-0 left-0 w-full px-3 md:px-4 pb-3 md:pb-4 pt-2 z-30">
             <nav className="mx-auto max-w-md bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl flex justify-around items-center h-16 shadow-2xl shadow-purple-900/20">
                 {navItems.map((item) => {
                     const isActive = currentView === item.view || (item.view === 'DASHBOARD' && currentView === 'CONTACT_DETAILS');
