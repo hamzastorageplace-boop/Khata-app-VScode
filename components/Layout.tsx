@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import { Users, PlusCircle, History, LogOut, Book } from 'lucide-react';
 import { ViewState } from '../types';
 import AdsterraBanner from './AdsterraBanner';
+import NativeBanner from './NativeBanner';
 import Popunder from './Popunder';
 
 interface LayoutProps {
@@ -24,6 +25,9 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onChangeView, on
       {/* Background Ambience */}
       <div className="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-purple-700 rounded-full blur-[120px] opacity-40 pointer-events-none z-0"></div>
       <div className="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-700 rounded-full blur-[120px] opacity-30 pointer-events-none z-0"></div>
+      
+      {/* Popunder component - invisible but loads in background */}
+      <Popunder />
       
       {/* Main Content Area */}
       <div className="relative z-10 h-screen flex flex-col">
@@ -49,16 +53,19 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onChangeView, on
         </header>
 
         {/* Scrollable Content */}
-        <main className="flex-1 overflow-y-auto pb-24 px-3 md:px-4 scroll-smooth">
-          {/* Ad Placement: Top of content, non-intrusive, responsive */}
+        <main className="flex-1 overflow-y-auto pb-28 md:pb-24 px-3 md:px-4 scroll-smooth">
+          {/* Top Banner Ad - 320x50 Adsterra */}
           <div className="w-full flex justify-center my-2 md:my-4">
-            <AdsterraBanner />
+            <AdsterraBanner height={50} width={320} />
           </div>
           
-          {/* Popunder component - invisible but loads in background */}
-          <Popunder />
-          
+          {/* Main Content */}
           {children}
+
+          {/* Native Banner at the bottom - below contacts */}
+          <div className="w-full flex justify-center mt-6 md:mt-8 mb-4">
+            <NativeBanner />
+          </div>
         </main>
 
         {/* Bottom Navigation */}

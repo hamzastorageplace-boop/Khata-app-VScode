@@ -13,9 +13,9 @@ const AdsterraBanner: React.FC<AdsterraBannerProps> = ({ height = 50, width = 32
   useEffect(() => {
     // Detect if mobile and adjust dimensions
     const handleResize = () => {
-      const width = typeof window !== 'undefined' ? window.innerWidth : 1024;
-      setWindowWidth(width);
-      setIsMobile(width < 768);
+      const w = typeof window !== 'undefined' ? window.innerWidth : 1024;
+      setWindowWidth(w);
+      setIsMobile(w < 768);
     };
 
     handleResize();
@@ -26,76 +26,66 @@ const AdsterraBanner: React.FC<AdsterraBannerProps> = ({ height = 50, width = 32
   useEffect(() => {
     if (!bannerRef.current) return;
 
-    // Determine responsive dimensions
-    let adWidth = width;
-    let adHeight = height;
-
-    if (isMobile) {
-      // Mobile responsive sizes
-      if (windowWidth < 360) {
-        adWidth = 280;
-        adHeight = 50;
-      } else if (windowWidth < 480) {
-        adWidth = 300;
-        adHeight = 50;
-      } else {
-        adWidth = 320;
-        adHeight = 50;
-      }
-    }
-
     try {
-      // Clear any existing scripts to prevent duplicates
+      // Clear any existing content
       bannerRef.current.innerHTML = '';
 
-      const zoneId = '8bb77c4d84ed657dab7d370c26e05600'; 
-      const scriptUrl = `//www.highperformanceformat.com/${zoneId}/invoke.js`; 
+      // Determine responsive dimensions based on screen size
+      let adWidth = 320;
+      let adHeight = 50;
 
-      // Create configuration script
-      const confScript = document.createElement('script');
-      confScript.type = 'text/javascript';
-      confScript.async = true;
-      confScript.innerHTML = `
-        if (typeof atOptions === 'undefined') {
-          var atOptions = {};
+      if (isMobile) {
+        if (windowWidth < 360) {
+          adWidth = 280;
+        } else if (windowWidth < 480) {
+          adWidth = 300;
+        } else {
+          adWidth = 320;
         }
-        atOptions = {
-          'key' : '${zoneId}',
-          'format' : 'iframe',
-          'height' : ${adHeight},
-          'width' : ${adWidth},
-          'params' : {}
-        };
-      `;
+      } else {
+        adWidth = width;
+        adHeight = height;
+      }
 
-      // Create invoke script
-      const invokeScript = document.createElement('script');
-      invokeScript.type = 'text/javascript';
-      invokeScript.src = scriptUrl;
-      invokeScript.async = true;
+      // Set window global atOptions for the ad network
+      (window as any).atOptions = {
+        key: '8bb77c4d84ed657dab7d370c26e05600',
+        format: 'iframe',
+        height: adHeight,
+        width: adWidth,
+        params: {}
+      };
 
-      // Add error handling
-      invokeScript.onerror = () => {
+      // Create and inject the invoke script
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.async = true;
+      script.src = '//www.highperformanceformat.com/8bb77c4d84ed657dab7d370c26e05600/invoke.js';
+
+      script.onerror = () => {
         console.warn("Failed to load Adsterra banner ad");
       };
 
+      script.onload = () => {
+        console.log("Adsterra banner ad loaded successfully");
+      };
+
       if (bannerRef.current) {
-        bannerRef.current.appendChild(confScript);
-        bannerRef.current.appendChild(invokeScript);
+        bannerRef.current.appendChild(script);
       }
     } catch (e) {
       console.error("Error initializing Adsterra banner", e);
     }
-  }, [isMobile, windowWidth]);
+  }, [isMobile, windowWidth, height, width]);
 
   return (
-    <div className="flex justify-center items-center my-4 overflow-hidden relative z-10 min-h-[50px] w-full">
+    <div className="flex justify-center items-center my-2 md:my-4 overflow-hidden relative z-10 w-full">
       <div 
-        ref={bannerRef} 
+        ref={bannerRef}
         style={{ 
+          minHeight: height,
           width: isMobile ? (windowWidth < 360 ? 280 : windowWidth < 480 ? 300 : 320) : width,
-          height: height,
-          minHeight: height
+          height: height
         }}
         className="bg-white/5 rounded-lg flex items-center justify-center border border-white/5 shadow-lg backdrop-blur-sm overflow-hidden"
       >
