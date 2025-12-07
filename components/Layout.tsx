@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { Users, PlusCircle, History, LogOut, Book } from 'lucide-react';
 import { ViewState } from '../types';
 import AdsterraBanner from './AdsterraBanner';
-import NativeBanner from './NativeBanner';
+import SocialBar from './SocialBar';
 import Popunder from './Popunder';
 
 interface LayoutProps {
@@ -62,10 +62,9 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onChangeView, on
           {/* Main Content */}
           {children}
 
-          {/* Native Banner at the bottom - below contacts */}
-          <div className="w-full flex justify-center mt-6 md:mt-8 mb-4">
-            <NativeBanner />
-          </div>
+          {/* Social Bar (injected into body near end) - replaces Native Banner */}
+          {/* SocialBar injects the script directly into document.body (just before </body>) */}
+          <SocialBar />
         </main>
 
         {/* Bottom Navigation */}
